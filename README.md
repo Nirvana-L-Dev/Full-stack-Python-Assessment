@@ -15,28 +15,6 @@ A Django web application for managing student skills, built with Python and Djan
 - Django admin panel for backend management
 - Custom styling via CSS
 
-## Screenshots
-
-> Save the corresponding screenshots into a `screenshots/` folder in the project root, using the filenames below, before pushing to GitHub.
-
-**Admin Dashboard**
-![Admin Dashboard](screenshots/dashboard.png)
-
-**Add Student Form**
-![Add Student](screenshots/add-student.png)
-
-**Admin Login**
-![Admin Login](screenshots/login.png)
-
-**Student Registration (Public)**
-![Student Registration](screenshots/registration.png)
-
-**Parent Portal**
-![Parent Portal](screenshots/parent-portal.png)
-
-**Feedback & Complaints**
-![Feedback](screenshots/feedback.png)
-
 ## Tech Stack
 
 - **Backend:** Python, Django
