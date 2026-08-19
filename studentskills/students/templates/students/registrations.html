@@ -1,0 +1,23 @@
+{% extends 'students/base.html' %}
+{% block title %}Student Registrations{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-title">📝 Pending Registrations</div>
+    <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Mobile</th><th>Email</th><th>Qualification</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+    <tbody>{% for r in registrations %}<tr>
+        <td>{{ r.first_name }} {{ r.last_name }}</td>
+        <td>{{ r.mobile_number }}</td>
+        <td>{{ r.email }}</td>
+        <td>{{ r.qualification }}</td>
+        <td><span class="badge {% if r.status == 'Approved' %}badge-python{% elif r.status == 'Rejected' %}badge-java{% else %}badge-dotnet{% endif %}">{{ r.status }}</span></td>
+        <td>{{ r.submitted_at|date:"d M Y" }}</td>
+        <td>{% if r.status == 'Pending' %}
+            <form method="POST" style="display:inline;">{% csrf_token %}
+                <input type="hidden" name="reg_id" value="{{ r.pk }}">
+                <button type="submit" name="action" value="Approved" class="btn btn-success" style="padding:4px 10px; font-size:12px;">Approve</button>
+                <button type="submit" name="action" value="Rejected" class="btn btn-danger" style="padding:4px 10px; font-size:12px;">Reject</button>
+            </form>{% else %}—{% endif %}
+        </td>
+    </tr>{% empty %}<tr><td colspan="7" style="text-align:center;color:#999;">No registrations yet.</td></tr>{% endfor %}</tbody></table></div>
+</div>
+{% endblock %}

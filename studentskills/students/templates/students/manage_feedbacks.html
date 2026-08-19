@@ -1,0 +1,17 @@
+{% extends 'students/base.html' %}
+{% block title %}Manage Feedbacks{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-title">💬 Feedbacks & Complaints</div>
+    <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Role</th><th>Type</th><th>Subject</th><th>Message</th><th>Status</th><th>Date</th></tr></thead>
+    <tbody>{% for f in feedbacks %}<tr>
+        <td>{{ f.name }}<br><small style="color:#999;">{{ f.email }}</small></td>
+        <td>{{ f.role }}</td>
+        <td><span class="badge {% if f.feedback_type == 'Complaint' %}badge-java{% else %}badge-python{% endif %}">{{ f.feedback_type }}</span></td>
+        <td>{{ f.subject }}</td>
+        <td style="max-width:200px;">{{ f.message|truncatechars:80 }}</td>
+        <td>{{ f.status }}</td>
+        <td>{{ f.created_at|date:"d M Y" }}</td>
+    </tr>{% empty %}<tr><td colspan="7" style="text-align:center;color:#999;">No feedback yet.</td></tr>{% endfor %}</tbody></table></div>
+</div>
+{% endblock %}

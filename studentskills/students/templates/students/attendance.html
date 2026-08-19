@@ -1,0 +1,31 @@
+{% extends 'students/base.html' %}
+{% block title %}Mark Attendance{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-title">📋 Mark Attendance — {{ today }}</div>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>#</th><th>Roll No</th><th>Name</th><th>Present</th><th>Absent</th><th>Late</th></tr></thead>
+                <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ student.roll_number }}</td>
+                    <td>{{ student.first_name }} {{ student.last_name }}</td>
+                    <td><input type="radio" name="attendance_{{ student.pk }}" value="Present" {% if student.pk not in existing %}checked{% endif %}></td>
+                    <td><input type="radio" name="attendance_{{ student.pk }}" value="Absent" {% if student.pk in existing %}checked{% endif %}></td>
+                    <td><input type="radio" name="attendance_{{ student.pk }}" value="Late"></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div style="margin-top:20px; display:flex; gap:12px;">
+            <button type="submit" class="btn btn-success">Save Attendance</button>
+            <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

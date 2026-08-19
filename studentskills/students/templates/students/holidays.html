@@ -1,0 +1,21 @@
+{% extends 'students/base.html' %}
+{% block title %}Holidays{% endblock %}
+{% block content %}
+<div class="form-row" style="align-items:start;">
+    <div class="card">
+        <div class="card-title">🏖️ Add Holiday</div>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group"><label>Holiday Name *</label><input type="text" name="name" required></div>
+            <div class="form-group"><label>Date *</label><input type="date" name="date" required></div>
+            <div class="form-group"><label>Description</label><textarea name="description" rows="2"></textarea></div>
+            <button type="submit" class="btn btn-success">Add Holiday</button>
+        </form>
+    </div>
+    <div class="card">
+        <div class="card-title">📋 Holiday List</div>
+        <div class="table-wrapper"><table><thead><tr><th>Holiday</th><th>Date</th></tr></thead>
+        <tbody>{% for h in holidays %}<tr><td>{{ h.name }}</td><td>{{ h.date }}</td></tr>{% empty %}<tr><td colspan="2" style="text-align:center;color:#999;">No holidays added.</td></tr>{% endfor %}</tbody></table></div>
+    </div>
+</div>
+{% endblock %}

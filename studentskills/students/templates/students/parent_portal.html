@@ -1,0 +1,52 @@
+{% extends 'students/base.html' %}
+{% block title %}Parent Portal{% endblock %}
+{% block content %}
+<div class="card" style="max-width:600px; margin:0 auto;">
+    <div class="card-title">👨‍👩‍👧 Parent Portal</div>
+    <p style="color:#666; margin-bottom:20px; font-size:14px;">Search for your child using their name or roll number to view their report.</p>
+    <form method="GET">
+        <div class="form-group"><label>Search by Name or Roll Number</label>
+            <input type="text" name="search" value="{{ search }}" placeholder="e.g. Soumya or JALA0001" autofocus>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:auto;">Search</button>
+    </form>
+</div>
+{% if search and not student %}
+<div class="card" style="max-width:600px; margin:20px auto; text-align:center; color:#999;">No student found for "{{ search }}".</div>
+{% endif %}
+{% if student %}
+<div class="card" style="max-width:700px; margin:20px auto;">
+    <div style="display:flex; align-items:center; gap:20px; margin-bottom:20px;">
+        {% if student.profile_image %}<img src="{{ student.profile_image.url }}" style="width:80px; height:80px; border-radius:50%; object-fit:cover;">
+        {% else %}<div style="width:80px; height:80px; border-radius:50%; background:#e8eaf6; display:flex; align-items:center; justify-content:center; font-size:36px;">👤</div>{% endif %}
+        <div>
+            <h2 style="color:#1a237e;">{{ student.first_name }} {{ student.last_name }}</h2>
+            <p style="color:#666;">Roll No: <strong>{{ student.roll_number }}</strong> | {{ student.qualification }}</p>
+            <p style="color:#666;">Skills: {{ student.get_skills }}</p>
+        </div>
+    </div>
+    <div class="form-row">
+        <div><strong>Mobile:</strong> {{ student.mobile_number }}</div>
+        <div><strong>Email:</strong> {{ student.email }}</div>
+        <div><strong>Gender:</strong> {{ student.gender }}</div>
+        <div><strong>DOB:</strong> {{ student.dob }}</div>
+    </div>
+    <hr style="margin:20px 0; border:none; border-top:1px solid #eee;">
+    <h3 style="color:#1a237e; margin-bottom:12px;">📊 Academic Report</h3>
+    {% if student.marks.all %}
+    <table><thead><tr><th>Subject</th><th>Exam</th><th>Marks</th><th>Max</th><th>%</th></tr></thead>
+    <tbody>{% for m in student.marks.all %}<tr><td>{{ m.subject.name }}</td><td>{{ m.exam_type }}</td><td>{{ m.marks_obtained }}</td><td>{{ m.max_marks }}</td><td>{{ m.percentage }}%</td></tr>{% endfor %}</tbody></table>
+    {% else %}<p style="color:#999;">No marks recorded yet.</p>{% endif %}
+    <hr style="margin:20px 0; border:none; border-top:1px solid #eee;">
+    <h3 style="color:#1a237e; margin-bottom:12px;">🏆 Achievements</h3>
+    {% if student.achievements.all %}
+    {% for a in student.achievements.all %}<div style="padding:10px; background:#f5f5f5; border-radius:6px; margin-bottom:8px;"><strong>{{ a.title }}</strong> — {{ a.date }}<br><small style="color:#666;">{{ a.description }}</small></div>{% endfor %}
+    {% else %}<p style="color:#999;">No achievements recorded yet.</p>{% endif %}
+    <hr style="margin:20px 0; border:none; border-top:1px solid #eee;">
+    <h3 style="color:#1a237e; margin-bottom:12px;">📋 Attendance</h3>
+    {% with total=student.attendance.count present=student.attendance.filter %}
+    <p>Total Days: {{ student.attendance.count }} | Present: {{ student.attendance.all|length }}</p>
+    {% endwith %}
+</div>
+{% endif %}
+{% endblock %}

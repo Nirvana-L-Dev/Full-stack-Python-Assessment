@@ -1,0 +1,30 @@
+{% extends 'students/base.html' %}
+{% block title %}Best Student{% endblock %}
+{% block content %}
+<div class="form-row" style="align-items:start;">
+    <div class="card">
+        <div class="card-title">🏆 Award Best Student</div>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group"><label>Year *</label><input type="number" name="year" value="2025" required></div>
+            <div class="form-group"><label>Student *</label>
+                <select name="student" required>
+                    <option value="">-- Select Student --</option>
+                    {% for s in students %}<option value="{{ s.pk }}">{{ s.first_name }} {{ s.last_name }} ({{ s.roll_number }})</option>{% endfor %}
+                </select>
+            </div>
+            <div class="form-group"><label>Reason *</label><textarea name="reason" rows="4" required></textarea></div>
+            <button type="submit" class="btn btn-success">Award</button>
+        </form>
+    </div>
+    <div class="card">
+        <div class="card-title">🏅 Award History</div>
+        {% for a in awards %}
+        <div style="padding:12px; background:#fff8e1; border-left:4px solid #f57f17; border-radius:4px; margin-bottom:10px;">
+            <strong>{{ a.year }} — {{ a.student.first_name }} {{ a.student.last_name }}</strong>
+            <p style="color:#555; font-size:13px; margin-top:4px;">{{ a.reason }}</p>
+        </div>
+        {% empty %}<p style="color:#999;">No awards given yet.</p>{% endfor %}
+    </div>
+</div>
+{% endblock %}

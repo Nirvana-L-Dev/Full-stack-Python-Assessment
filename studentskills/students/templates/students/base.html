@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}JALA Student Skills{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+<nav class="navbar">
+    <h1>🎓 JALA Student Skills Management</h1>
+    <div>
+        {% if user.is_authenticated %}
+        <a href="{% url 'home' %}">🏠 Home</a>
+        {% if is_admin or is_teacher %}
+        <a href="{% url 'create_student' %}">➕ Add Student</a>
+        <a href="{% url 'mark_attendance' %}">📋 Attendance</a>
+        {% endif %}
+        {% if is_admin %}
+        <a href="{% url 'manage_events' %}">📅 Events</a>
+        <a href="{% url 'manage_notifications' %}">🔔 Notifications</a>
+        <a href="{% url 'manage_holidays' %}">🏖️ Holidays</a>
+        <a href="{% url 'best_student' %}">🏆 Best Student</a>
+        <a href="{% url 'manage_feedbacks' %}">💬 Feedbacks</a>
+        <a href="{% url 'manage_registrations' %}">📝 Registrations</a>
+        <a href="{% url 'manage_subjects' %}">📚 Subjects</a>
+        {% endif %}
+        <a href="{% url 'logout' %}">🚪 Logout ({{ user.username }})</a>
+        {% else %}
+        <a href="{% url 'parent_portal' %}">👨‍👩‍👧 Parent Portal</a>
+        <a href="{% url 'feedback' %}">💬 Feedback</a>
+        <a href="{% url 'register_student' %}">📝 Register</a>
+        {% endif %}
+    </div>
+</nav>
+<div class="container">
+    {% for message in messages %}
+    <div class="alert {% if 'error' in message.tags %}alert-error{% else %}alert-success{% endif %}">{{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+</div>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

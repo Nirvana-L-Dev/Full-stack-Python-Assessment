@@ -1,0 +1,13 @@
+{% extends 'students/base.html' %}
+{% block title %}Delete Student{% endblock %}
+{% block content %}
+<div class="card" style="max-width:500px; margin:0 auto; text-align:center;">
+    <div style="font-size:48px; margin-bottom:16px;">⚠️</div>
+    <h2 style="color:#c62828; margin-bottom:12px;">Confirm Delete</h2>
+    <p style="color:#555; margin-bottom:24px;">Do you want to delete <strong>{{ student.first_name }} {{ student.last_name }}</strong>?</p>
+    <div style="display:flex; gap:12px; justify-content:center;">
+        <form method="POST">{% csrf_token %}<button type="submit" class="btn btn-danger">Yes, Delete</button></form>
+        <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'students/base.html' %}
+{% block title %}Edit Student{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-title">✏️ Edit Student — {{ student.first_name }} {{ student.last_name }} ({{ student.roll_number }})</div>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h4 style="color:#1a237e; margin-bottom:16px;">Personal Information</h4>
+        <div class="form-row">
+            <div class="form-group"><label>First Name *</label><input type="text" name="first_name" value="{{ student.first_name }}" required></div>
+            <div class="form-group"><label>Last Name *</label><input type="text" name="last_name" value="{{ student.last_name }}" required></div>
+        </div>
+        <div class="form-row">
+            <div class="form-group"><label>Mobile *</label><input type="tel" name="mobile_number" value="{{ student.mobile_number }}" required></div>
+            <div class="form-group"><label>Email *</label><input type="email" name="email" value="{{ student.email }}" required></div>
+        </div>
+        <div class="form-row">
+            <div class="form-group"><label>Gender *</label>
+                <div class="radio-group" style="margin-top:8px;">
+                    <label><input type="radio" name="gender" value="Male" {% if student.gender == 'Male' %}checked{% endif %}> Male</label>
+                    <label><input type="radio" name="gender" value="Female" {% if student.gender == 'Female' %}checked{% endif %}> Female</label>
+                </div>
+            </div>
+            <div class="form-group"><label>Date of Birth *</label><input type="date" name="dob" value="{{ student.dob|date:'Y-m-d' }}" required></div>
+        </div>
+        <div class="form-row">
+            <div class="form-group"><label>Qualification *</label>
+                <select name="qualification" required>
+                    {% for val, label in student.QUALIFICATION_CHOICES %}
+                    <option value="{{ val }}" {% if student.qualification == val %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group"><label>Profile Image</label>
+                {% if student.profile_image %}<img src="{{ student.profile_image.url }}" style="width:50px;height:50px;border-radius:50%;object-fit:cover;margin-bottom:8px;display:block;">{% endif %}
+                <input type="file" name="profile_image" accept="image/*">
+            </div>
+        </div>
+        <div class="form-group"><label>Address</label><textarea name="address" rows="2">{{ student.address }}</textarea></div>
+
+        <h4 style="color:#1a237e; margin:20px 0 16px;">Parent Information</h4>
+        <div class="form-row">
+            <div class="form-group"><label>Parent Name</label><input type="text" name="parent_name" value="{{ student.parent_name }}"></div>
+            <div class="form-group"><label>Parent Mobile</label><input type="tel" name="parent_mobile" value="{{ student.parent_mobile }}"></div>
+        </div>
+        <div class="form-group"><label>Parent Email</label><input type="email" name="parent_email" value="{{ student.parent_email }}"></div>
+
+        <h4 style="color:#1a237e; margin:20px 0 16px;">Skills & Subjects</h4>
+        <div class="form-group"><label>Tech Skills</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="skill_java" {% if student.skill_java %}checked{% endif %}> JAVA</label>
+                <label><input type="checkbox" name="skill_dotnet" {% if student.skill_dotnet %}checked{% endif %}> .Net</label>
+                <label><input type="checkbox" name="skill_python" {% if student.skill_python %}checked{% endif %}> Python</label>
+                <label><input type="checkbox" name="skill_database" {% if student.skill_database %}checked{% endif %}> Database</label>
+            </div>
+        </div>
+        <div class="form-group"><label>Subjects</label>
+            <div class="checkbox-group">
+                {% for s in subjects %}<label><input type="checkbox" name="subjects" value="{{ s.pk }}" {% if s in student.subjects.all %}checked{% endif %}> {{ s.name }}</label>{% endfor %}
+            </div>
+        </div>
+        <div class="form-group"><label>Description</label>
+            <textarea name="description" rows="3" maxlength="500" id="desc">{{ student.description }}</textarea>
+            <div style="text-align:right; font-size:12px; color:#999;"><span id="charCount">{{ student.description|length }}</span>/500</div>
+        </div>
+        <div style="display:flex; gap:12px;">
+            <button type="submit" class="btn btn-success">Update Student</button>
+            <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>document.getElementById('desc').addEventListener('input', function() { document.getElementById('charCount').textContent = this.value.length; });</script>
+{% endblock %}
